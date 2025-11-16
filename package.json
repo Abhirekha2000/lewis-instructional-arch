@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@azure/cosmos": "^4.7.0",
+    "@azure/storage-blob": "^12.29.1",
+    "cross-fetch": "^4.1.0",
+    "uuid": "^13.0.0"
+  }
+}
