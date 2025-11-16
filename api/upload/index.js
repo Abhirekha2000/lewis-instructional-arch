@@ -1,3 +1,4 @@
+import crypto from "crypto";
 const crypto = require("crypto");
 const { Buffer } = require("buffer");
 const { BlobServiceClient } = require("@azure/storage-blob");
