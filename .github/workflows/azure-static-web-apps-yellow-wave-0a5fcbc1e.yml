@@ -16,35 +16,28 @@ jobs:
     name: Build and Deploy Job
     steps:
       - uses: actions/checkout@v3
-        with:
-          submodules: true
-          lfs: false
-
-      - name: Use Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
 
       - name: Build And Deploy
-        id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_WAVE_0A5FCBC1E }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          
-          #### Correct paths ####
+
+          # FRONTEND CONFIG
           app_location: "frontend"
           output_location: "dist"
-          api_location: "api"
-
-          #### Force Azure to use correct Node version ####
           app_build_command: "npm install && npm run build"
+
+          # FUNCTIONS CONFIG
+          api_location: "api"
           api_build_command: "npm install"
 
-      - name: Close Pull Request
-        if: github.event_name == 'pull_request' && github.event.action == 'closed'
-        uses: Azure/static-web-apps-deploy@v1
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event_action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_WAVE_0A5FCBC1E }}
           action: "close"
