@@ -8,7 +8,7 @@ function App() {
 
   const callHello = async () => {
     try {
-      const res = await fetch("http://localhost:7071/api/hello");
+      const res = await fetch("/api/hello");
       const data = await res.json();
       setHelloMsg(JSON.stringify(data, null, 2));
     } catch {
@@ -18,7 +18,7 @@ function App() {
 
   const loadItems = async () => {
     try {
-      const res = await fetch("http://localhost:7071/api/items");
+      const res = await fetch("/api/items");
       const data = await res.json();
       setItems(data);
     } catch {
@@ -46,7 +46,7 @@ function App() {
     };
 
     try {
-      const res = await fetch("http://localhost:7071/api/upload", {
+      const res = await fetch("/api/upload", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
