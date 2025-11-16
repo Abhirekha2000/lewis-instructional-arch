@@ -1,35 +1,32 @@
-const { BlobServiceClient } = require("@azure/storage-blob");
 const crypto = require("crypto");
 const { Buffer } = require("buffer");
+const { BlobServiceClient } = require("@azure/storage-blob");
 
 module.exports = async function (context, req) {
     context.log("Upload function triggered");
 
     const fileName = req.body?.fileName;
-    const fileContent = req.body?.fileContent; // base64 string
+    const fileContent = req.body?.fileContent;
 
     if (!fileName || !fileContent) {
         context.res = {
             status: 400,
-            body: { message: "fileName and fileContent are required." },
+            body: { message: "fileName and fileContent are required." }
         };
         return;
     }
 
     try {
-        const AZURE_STORAGE_CONNECTION_STRING =
-            process.env.AZURE_STORAGE_CONNECTION_STRING;
+        const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING;
 
         const blobServiceClient = BlobServiceClient.fromConnectionString(
-            AZURE_STORAGE_CONNECTION_STRING
+            connectionString
         );
 
         const containerClient = blobServiceClient.getContainerClient("uploads");
 
-        // Convert base64 → Buffer
         const buffer = Buffer.from(fileContent, "base64");
 
-        // Upload blob
         const blockBlobClient = containerClient.getBlockBlobClient(fileName);
         await blockBlobClient.uploadData(buffer);
 
@@ -38,14 +35,15 @@ module.exports = async function (context, req) {
             body: {
                 success: true,
                 message: "File uploaded successfully!",
-                fileUrl: blockBlobClient.url,
-            },
+                fileUrl: blockBlobClient.url
+            }
         };
+
     } catch (err) {
-        context.log("Error:", err);
+        context.log("Upload Error:", err.message);
         context.res = {
             status: 500,
-            body: { error: "Upload failed", details: err.message },
+            body: { error: "Upload failed", details: err.message }
         };
     }
 };
