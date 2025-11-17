@@ -36,7 +36,7 @@ lewis-instructional-arch/
 ## 🚀 Step 1 — Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
+git clone https://github.com/Abhirekha2000/lewis-instructional-arch.git
 cd lewis-instructional-arch
 ```
 
